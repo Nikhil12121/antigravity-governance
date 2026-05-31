@@ -810,8 +810,8 @@ const Step5Preview = () => {
     ),
     // Slide 6A: Timeline - Lifecycle Innovation
     (
-      <div style={{ ...slideStyle, overflow: 'auto', background: '#fafafa' }} key="slide_6a_timeline_1">
-         <div style={{ padding: '1.5rem' }}>
+      <div style={{ ...slideStyle, overflow: 'hidden', background: '#fafafa' }} key="slide_6a_timeline_1">
+         <div style={{ padding: '1.5rem', transform: 'scale(0.8)', transformOrigin: 'top center', width: '125%', height: '125%' }}>
            <h2 style={{ color: '#F04E23', fontSize: '1.2rem', margin: '0 0 1rem 0' }}>CDP Timeline - Lifecycle Innovation</h2>
            <Template1 data={data} years={timelineYears} />
          </div>
@@ -819,8 +819,8 @@ const Step5Preview = () => {
     ),
     // Slide 6B: Timeline - Plan with Financials
     (
-      <div style={{ ...slideStyle, overflow: 'auto', background: '#fafafa' }} key="slide_6b_timeline_2">
-         <div style={{ padding: '1.5rem' }}>
+      <div style={{ ...slideStyle, overflow: 'hidden', background: '#fafafa' }} key="slide_6b_timeline_2">
+         <div style={{ padding: '1.5rem', transform: 'scale(0.8)', transformOrigin: 'top center', width: '125%', height: '125%' }}>
            <h2 style={{ color: '#F04E23', fontSize: '1.2rem', margin: '0 0 1rem 0' }}>CDP Timeline - Plan with Financials</h2>
            <Template2 data={data} years={timelineYears} />
          </div>
@@ -828,8 +828,8 @@ const Step5Preview = () => {
     ),
     // Slide 6C: Timeline - Scenario Plans
     (
-      <div style={{ ...slideStyle, overflow: 'auto', background: '#fafafa' }} key="slide_6c_timeline_3">
-         <div style={{ padding: '1.5rem' }}>
+      <div style={{ ...slideStyle, overflow: 'hidden', background: '#fafafa' }} key="slide_6c_timeline_3">
+         <div style={{ padding: '1.5rem', transform: 'scale(0.8)', transformOrigin: 'top center', width: '125%', height: '125%' }}>
            <h2 style={{ color: '#F04E23', fontSize: '1.2rem', margin: '0 0 1rem 0' }}>CDP Timeline - Scenario Plans</h2>
            <Template3 data={data} years={timelineYears} />
          </div>
