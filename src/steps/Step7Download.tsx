@@ -162,6 +162,168 @@ const Step6Download = () => {
 
       slide5.addTable([valHeader, ...valRows], { x: 0.5, y: 1.5, w: 9, rowH: 0.3, fontSize: 10, border: { pt: 0.5, color: '999999' } });
 
+      const tlYears = [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032];
+      const startX = 1.0;
+      const endX = 9.5;
+      const tWidth = endX - startX;
+
+      // ==========================================
+      // SLIDE 6A: TIMELINE - LIFECYCLE INNOVATION
+      // ==========================================
+      let slide6a = pptx.addSlide();
+      addSlideHeader(slide6a, 'CDP Timeline', 'Lifecycle Innovation');
+      
+      tlYears.forEach((y, i) => {
+         const xPos = startX + (i / tlYears.length) * tWidth;
+         slide6a.addText(y.toString(), { x: xPos, y: 1.2, w: tWidth / tlYears.length, h: 0.3, align: 'center', fontSize: 10, fill: { color: 'F1F5F9' }, border: { pt: 1, color: 'CCCCCC' } });
+      });
+
+      let currentY = 1.6;
+      (data.lifecycleGroups || []).forEach(group => {
+         const groupBars = group.swimlanes.map(lane => data.lifecycleBars?.find(b => b.swimlane === lane)).filter(Boolean);
+         if (groupBars.length === 0) return;
+         
+         const rowHeight = Math.max(0.8, groupBars.length * 0.4 + 0.2);
+         
+         slide6a.addText(group.groupName || '', { x: 0.2, y: currentY, w: 0.8, h: rowHeight, fontSize: 8, bold: true, align: 'center', border: { pt: 1, color: 'CCCCCC' } });
+         
+         tlYears.forEach((_, i) => {
+            const xPos = startX + (i / tlYears.length) * tWidth;
+            slide6a.addShape('rect', { x: xPos, y: currentY, w: tWidth / tlYears.length, h: rowHeight, fill: { color: 'FFFFFF' }, line: { color: 'EEEEEE', width: 1 } });
+         });
+
+         groupBars.forEach((bar, idx) => {
+             if(!bar) return;
+             const laneMils = data.lifecycleMilestones?.filter(m => m.swimlane === bar.swimlane) || [];
+             const bTop = currentY + 0.1 + (idx * 0.4);
+             
+             const leftPct = Math.max(0, (bar.startYear - tlYears[0]) / tlYears.length);
+             const widthPct = Math.max(0.05, (bar.endYear - bar.startYear) / tlYears.length);
+             
+             let bColor = '3B82F6';
+             if (bar.colorClass?.includes('green')) bColor = '10B981';
+             else if (bar.colorClass?.includes('red')) bColor = 'EF4444';
+
+             slide6a.addShape('rect', { x: startX + (leftPct * tWidth), y: bTop, w: widthPct * tWidth, h: 0.25, fill: { color: bColor }, line: { color: bColor, width: 1 } });
+             slide6a.addText(bar.name, { x: startX + (leftPct * tWidth), y: bTop, w: widthPct * tWidth, h: 0.25, fontSize: 8, color: 'FFFFFF', align: 'center', bold: true });
+
+             laneMils.forEach(m => {
+                 const yIdx = tlYears.indexOf(m.year);
+                 if(yIdx === -1) return;
+                 const mLeftPct = (yIdx / tlYears.length) + (m.position / 100) * (1 / tlYears.length);
+                 const mx = startX + (mLeftPct * tWidth);
+                 
+                 slide6a.addShape('diamond', { x: mx - 0.05, y: bTop - 0.05, w: 0.1, h: 0.1, fill: { color: 'F04E23' } });
+                 slide6a.addText(m.name, { x: mx - 0.3, y: bTop - 0.25, w: 0.6, h: 0.2, fontSize: 6, align: 'center', color: '111111' });
+             });
+         });
+         
+         currentY += rowHeight;
+      });
+
+      // ==========================================
+      // SLIDE 6B: TIMELINE - PLAN W/ FINANCIALS
+      // ==========================================
+      let slide6b = pptx.addSlide();
+      addSlideHeader(slide6b, 'CDP Timeline', 'Plan with Financials');
+      
+      const bars = data.lifecycleBars || [];
+      const cmcBars = bars.slice(0, 2);
+      const clinicalBars = bars.slice(2);
+      
+      slide6b.addText('SWIMLANE', { x: 0.2, y: 1.2, w: 1.0, h: 0.3, align: 'center', fontSize: 10, fill: { color: 'F1F5F9' }, border: { pt: 1, color: 'CCCCCC' } });
+      tlYears.forEach((y, i) => {
+         const xPos = startX + 0.2 + (i / tlYears.length) * (tWidth - 0.8);
+         slide6b.addText(y.toString(), { x: xPos, y: 1.2, w: (tWidth - 0.8) / tlYears.length, h: 0.3, align: 'center', fontSize: 10, fill: { color: 'F1F5F9' }, border: { pt: 1, color: 'CCCCCC' } });
+      });
+      slide6b.addText('Total [£m]', { x: startX + 0.2 + (tWidth - 0.8), y: 1.2, w: 0.6, h: 0.3, align: 'center', fontSize: 10, fill: { color: 'F1F5F9' }, border: { pt: 1, color: 'CCCCCC' } });
+
+      currentY = 1.6;
+      [...cmcBars, { id: 'spacer' }, ...clinicalBars].forEach((bar: any, bIdx) => {
+         const rowHeight = 0.5;
+         const gridW = tWidth - 0.8;
+         const gridX = startX + 0.2;
+         
+         if (bar.id === 'spacer') {
+             slide6b.addShape('rect', { x: 0.2, y: currentY, w: gridW + 1.6, h: rowHeight, fill: { color: 'F8FAFC' } });
+             currentY += rowHeight;
+             return;
+         }
+
+         tlYears.forEach((_, i) => {
+            const xPos = gridX + (i / tlYears.length) * gridW;
+            slide6b.addShape('rect', { x: xPos, y: currentY, w: gridW / tlYears.length, h: rowHeight, fill: { color: bIdx % 2 === 0 ? 'F8FAFC' : 'FFFFFF' }, line: { color: 'EEEEEE', width: 1 } });
+         });
+         
+         const leftPct = Math.max(0, (bar.startYear - tlYears[0]) / tlYears.length);
+         const widthPct = Math.max(0.05, (bar.endYear - bar.startYear) / tlYears.length);
+         const bTop = currentY + 0.125;
+         
+         let bColor = '3B82F6';
+         if (bar.colorClass?.includes('green') || bar.name.includes('Ph 3')) bColor = '10B981';
+         else if (bar.colorClass?.includes('red')) bColor = 'EF4444';
+
+         slide6b.addShape('rect', { x: gridX + (leftPct * gridW), y: bTop, w: widthPct * gridW, h: 0.25, fill: { color: bColor }, line: { color: bColor, width: 1 } });
+         slide6b.addText(bar.name, { x: gridX + (leftPct * gridW), y: bTop, w: widthPct * gridW, h: 0.25, fontSize: 8, color: 'FFFFFF', align: 'center', bold: true });
+         
+         currentY += rowHeight;
+      });
+
+      // ==========================================
+      // SLIDE 6C: TIMELINE - SCENARIO PLANS
+      // ==========================================
+      let slide6c = pptx.addSlide();
+      addSlideHeader(slide6c, 'CDP Timeline', 'Scenario Plans');
+      
+      slide6c.addText('Scenario', { x: 0.2, y: 1.2, w: 1.0, h: 0.3, align: 'center', fontSize: 10, fill: { color: 'F1F5F9' }, border: { pt: 1, color: 'CCCCCC' } });
+      tlYears.forEach((y, i) => {
+         const xPos = startX + 0.2 + (i / tlYears.length) * (tWidth - 0.8);
+         slide6c.addText(y.toString(), { x: xPos, y: 1.2, w: (tWidth - 0.8) / tlYears.length, h: 0.3, align: 'center', fontSize: 10, fill: { color: 'F1F5F9' }, border: { pt: 1, color: 'CCCCCC' } });
+      });
+      slide6c.addText('Total [£m]', { x: startX + 0.2 + (tWidth - 0.8), y: 1.2, w: 0.6, h: 0.3, align: 'center', fontSize: 10, fill: { color: 'F1F5F9' }, border: { pt: 1, color: 'CCCCCC' } });
+
+      currentY = 1.6;
+      (data.scenarioPlans || []).forEach(scen => {
+         const rowHeight = 1.0;
+         const gridW = tWidth - 0.8;
+         const gridX = startX + 0.2;
+         
+         slide6c.addText(scen.name || '', { x: 0.2, y: currentY, w: 1.0, h: rowHeight, fontSize: 9, italic: true, align: 'center', border: { pt: 1, color: 'CCCCCC' } });
+         
+         tlYears.forEach((_, i) => {
+            const xPos = gridX + (i / tlYears.length) * gridW;
+            slide6c.addShape('rect', { x: xPos, y: currentY, w: gridW / tlYears.length, h: rowHeight, fill: { color: 'FFFFFF' }, line: { color: 'EEEEEE', width: 1 } });
+         });
+         
+         (scen.bars || []).forEach(bar => {
+             const leftPct = Math.max(0, (bar.startYear - tlYears[0]) / tlYears.length);
+             const widthPct = Math.max(0.05, (bar.endYear - bar.startYear) / tlYears.length);
+             const bTop = currentY + 0.4;
+             
+             // Blue border logic for Scenario Plans requested by user
+             slide6c.addShape('rect', { x: gridX + (leftPct * gridW), y: bTop, w: widthPct * gridW, h: 0.25, fill: { color: 'FFFFFF' }, line: { color: '0284C7', width: 2 } });
+             slide6c.addText(bar.name, { x: gridX + (leftPct * gridW), y: bTop, w: widthPct * gridW, h: 0.25, fontSize: 8, color: '333333', align: 'center', bold: true });
+         });
+         
+         (scen.milestones || []).filter(m => m.isSelected).forEach(m => {
+             const yIdx = tlYears.indexOf(m.year);
+             if(yIdx === -1) return;
+             const mLeftPct = (yIdx / tlYears.length) + (m.position / 100) * (1 / tlYears.length);
+             const mx = gridX + (mLeftPct * gridW);
+             
+             const isTop = m.placement === 'top';
+             const mTop = isTop ? currentY + 0.2 : currentY + 0.8;
+             const diamondColor = isTop ? 'EAB308' : '0EA5E9'; // Yellow or Blue
+             
+             slide6c.addShape('diamond', { x: mx - 0.05, y: mTop - 0.05, w: 0.1, h: 0.1, fill: { color: diamondColor } });
+             slide6c.addText(m.name, { x: mx - 0.3, y: isTop ? mTop - 0.2 : mTop + 0.05, w: 0.6, h: 0.2, fontSize: 6, align: 'center', color: '111111' });
+         });
+
+         slide6c.addText(scen.totalEpe || '', { x: gridX + gridW, y: currentY, w: 0.6, h: rowHeight, fontSize: 10, bold: true, align: 'center', border: { pt: 1, color: 'CCCCCC' } });
+         
+         currentY += rowHeight;
+      });
+
       // ==========================================
       // SLIDE 7: HIO
       // ==========================================
