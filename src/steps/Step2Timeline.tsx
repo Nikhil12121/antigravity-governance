@@ -425,18 +425,20 @@ const Step2Timeline = () => {
                       return (
                         <div 
                           key={bar.id}
-                          className="lifecycle-bar outline-blue" 
+                          className="lifecycle-bar" 
                           style={{ 
                             left: `${leftPos}%`, 
                             width: `${width}%`,
                             top: '50%',
                             transform: 'translateY(-50%)',
                             height: '24px',
-                            lineHeight: '22px',
+                            lineHeight: '20px',
                             fontSize: '11px',
                             textAlign: 'center',
                             fontWeight: 600,
-                            zIndex: 5
+                            zIndex: 5,
+                            border: '2px solid #0284c7', // Thick blue border
+                            color: '#333' // Dark text
                           }}
                         >
                           {bar.name}
@@ -452,14 +454,14 @@ const Step2Timeline = () => {
                       
                       const isTop = m.placement === 'top';
                       const topOffset = isTop ? '22px' : 'calc(100% - 22px)';
-                      const colorClass = isTop ? 't1-marker' : 'm-color-blue';
+                      const diamondColor = isTop ? '#eab308' : '#0ea5e9'; // Yellow for top, blue for bottom
                       
                       return (
                         <React.Fragment key={m.id}>
                           {/* The Milestone Diamond */}
                           <div 
-                            className={`milestone-marker selected ${colorClass}`}
-                            style={{ left: `${leftPos}%`, top: topOffset, transform: 'translate(-50%, -50%)', zIndex: 20 }}
+                            className="milestone-marker selected"
+                            style={{ left: `${leftPos}%`, top: topOffset, transform: 'translate(-50%, -50%)', zIndex: 20, color: diamondColor }}
                             onClick={(e) => { e.stopPropagation(); toggleMilestone(m.id, 'scenario'); }}
                             title="Click to toggle"
                           >
