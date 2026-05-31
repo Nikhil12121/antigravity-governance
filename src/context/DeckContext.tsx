@@ -291,25 +291,43 @@ const initialData: GovernanceData = {
   scenarioPlans: [
     {
       id: 'scen1', name: 'Enable RT study early start. Launch 2028', ptrs: '30%', totalEpe: '£850M',
+      bars: [
+        { id: 'b1', name: 'RA Ph 2b dose range study', startYear: 2023, endYear: 2025 },
+        { id: 'b2', name: 'RA Ph 3 studies', startYear: 2026, endYear: 2028 }
+      ],
       milestones: [
-        { id: 'sm1_1', name: 'P2b FSFD', year: 2023, isSelected: true, swimlane: 'scen1', position: 40 },
-        { id: 'sm1_2', name: 'P3 Start', year: 2025, isSelected: true, swimlane: 'scen1', position: 20 },
-        { id: 'sm1_3', name: 'Launch', year: 2028, isSelected: true, swimlane: 'scen1', position: 60 }
+        { id: 'sm1_1', name: 'P2b FSFD', year: 2023, isSelected: true, swimlane: 'scen1', position: 20, barId: 'b1', placement: 'top' },
+        { id: 'sm1_2', name: 'C2FD', year: 2024, isSelected: true, swimlane: 'scen1', position: 10, barId: 'b1', placement: 'top' },
+        { id: 'sm1_3', name: 'DPD IA', year: 2024, isSelected: true, swimlane: 'scen1', position: 80, barId: 'b1', placement: 'bottom' },
+        { id: 'sm1_4', name: '1° EP', year: 2025, isSelected: true, swimlane: 'scen1', position: 10, barId: 'b1', placement: 'bottom' },
+        { id: 'sm1_5', name: 'P3 Start', year: 2026, isSelected: true, swimlane: 'scen1', position: 10, barId: 'b2', placement: 'top' },
+        { id: 'sm1_6', name: 'C2FHL', year: 2027, isSelected: true, swimlane: 'scen1', position: 20, barId: 'b2', placement: 'top' },
+        { id: 'sm1_7', name: 'Launch', year: 2028, isSelected: true, swimlane: 'scen1', position: 60, barId: 'b2', placement: 'top' }
       ]
     },
     {
       id: 'scen2', name: 'Acceleration plan phase 2b/3 approach. Launch 2027', ptrs: '28%', totalEpe: '£920M',
+      bars: [
+        { id: 'b3', name: 'Seamless Ph 2b/3 study', startYear: 2023, endYear: 2027 }
+      ],
       milestones: [
-        { id: 'sm2_1', name: 'Seamless 2b/3', year: 2024, isSelected: true, swimlane: 'scen2', position: 10 },
-        { id: 'sm2_2', name: 'Launch', year: 2027, isSelected: true, swimlane: 'scen2', position: 80 }
+        { id: 'sm2_1', name: 'P2 FSFD', year: 2023, isSelected: true, swimlane: 'scen2', position: 40, barId: 'b3', placement: 'top' },
+        { id: 'sm2_2', name: 'C2FD', year: 2024, isSelected: true, swimlane: 'scen2', position: 20, barId: 'b3', placement: 'top' },
+        { id: 'sm2_3', name: 'W52 IDMC', year: 2024, isSelected: true, swimlane: 'scen2', position: 50, barId: 'b3', placement: 'bottom' },
+        { id: 'sm2_4', name: 'Launch', year: 2027, isSelected: true, swimlane: 'scen2', position: 80, barId: 'b3', placement: 'top' }
       ]
     },
     {
       id: 'scen3', name: 'Delay indication until futility reached. Launch 2029', ptrs: '25%', totalEpe: '£780M',
+      bars: [
+        { id: 'b4', name: 'RA Ph 2b dose range study', startYear: 2023, endYear: 2025 },
+        { id: 'b5', name: 'RA Ph 3 studies', startYear: 2027, endYear: 2029 }
+      ],
       milestones: [
-        { id: 'sm3_1', name: 'P2b FSFD', year: 2024, isSelected: true, swimlane: 'scen3', position: 60 },
-        { id: 'sm3_2', name: 'P3 Start', year: 2026, isSelected: true, swimlane: 'scen3', position: 40 },
-        { id: 'sm3_3', name: 'Launch', year: 2029, isSelected: true, swimlane: 'scen3', position: 50 }
+        { id: 'sm3_1', name: 'P2b FSFD', year: 2023, isSelected: true, swimlane: 'scen3', position: 60, barId: 'b4', placement: 'top' },
+        { id: 'sm3_2', name: 'Futility', year: 2024, isSelected: true, swimlane: 'scen3', position: 30, barId: 'b4', placement: 'bottom' },
+        { id: 'sm3_3', name: 'P3 Start', year: 2027, isSelected: true, swimlane: 'scen3', position: 10, barId: 'b5', placement: 'top' },
+        { id: 'sm3_4', name: 'Launch', year: 2029, isSelected: true, swimlane: 'scen3', position: 50, barId: 'b5', placement: 'top' }
       ]
     }
   ],
